@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>LIVN CO. | Architecture, interiors and objects</title>
+    <title>LIVN CO. | Est. 2026</title>
     <meta
       name="description"
-      content="LIVN CO. designs and builds homes, interiors and furniture around the way people actually live."
+      content="LIVN CO. makes oversized hoodies, crewnecks and tees with clean piping and quiet marks. Drop 01 is out now."
     />
     <meta name="theme-color" content="#0b0b0c" />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230b0b0c'/%3E%3Cpath d='M22 16v32h20' fill='none' stroke='%23ededee' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
@@ -402,46 +402,54 @@
         letter-spacing: -0.04em;
       }
 
-      /* ---------- Bento ---------- */
+      /* ---------- Collection bento ---------- */
 
-      .studio {
+      .collection {
         padding-bottom: clamp(96px, 12vw, 160px);
       }
       .bento {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        grid-auto-rows: minmax(220px, auto);
+        grid-auto-rows: minmax(340px, auto);
         gap: 16px;
         grid-template-areas:
-          'arch arch int  stat'
-          'arch arch mat  mat'
-          'obj  qte  qte  qte';
+          'hood  hood  crewa crewb'
+          'hood  hood  teea  teeb'
+          'est   qte   qte   qte';
       }
-      .card-arch { grid-area: arch; min-height: 520px; }
-      .card-interiors { grid-area: int; }
-      .card-stat { grid-area: stat; }
-      .card-materials { grid-area: mat; }
-      .card-objects { grid-area: obj; }
+      .product-hoodie { grid-area: hood; }
+      .product-crew-a { grid-area: crewa; }
+      .product-crew-b { grid-area: crewb; }
+      .product-tee-a { grid-area: teea; }
+      .product-tee-b { grid-area: teeb; }
+      .card-stat { grid-area: est; }
       .card-quote { grid-area: qte; }
 
+      /* Tablet and phone: products in two columns, hoodie across the top */
       @media (max-width: 1023px) {
         .bento {
           grid-template-columns: repeat(2, 1fr);
           grid-template-areas:
-            'arch arch'
-            'int  stat'
-            'mat  mat'
-            'obj  obj'
-            'qte  qte';
+            'hood  hood'
+            'crewa crewb'
+            'teea  teeb'
+            'est   est'
+            'qte   qte';
         }
-        .card-arch { min-height: 440px; }
+        .product-hoodie .product-stage { min-height: 420px; }
       }
       @media (max-width: 639px) {
         .bento {
-          grid-template-columns: 1fr;
-          grid-template-areas: 'arch' 'int' 'stat' 'mat' 'obj' 'qte';
+          gap: 12px;
+          grid-auto-rows: minmax(250px, auto);
         }
-        .card-arch { min-height: 380px; }
+        .product-hoodie .product-stage { min-height: 320px; }
+        .product:not(.product-hoodie) {
+          padding: 16px;
+        }
+        .product:not(.product-hoodie) .product-info p {
+          display: none;
+        }
       }
 
       .card {
@@ -494,71 +502,75 @@
         letter-spacing: -0.025em;
         line-height: 1.2;
       }
-      .card-body p {
-        max-width: 42ch;
-        margin-top: 0.5rem;
-        color: var(--muted);
-        font-size: 0.95rem;
-      }
-      .card-body {
-        position: relative;
-      }
-
-      .viz {
-        position: absolute;
-        inset: 0;
-        z-index: -1;
-        pointer-events: none;
-      }
-
-      /* Architecture: layered louvre fins with pointer parallax */
-      .viz-slats {
+      /* Product cards: transparent cut-outs on a soft spotlight, with pointer parallax */
+      .product {
+        justify-content: space-between;
+        gap: 1rem;
         --px: 0;
         --py: 0;
-        overflow: hidden;
-        -webkit-mask-image: linear-gradient(to bottom, #000 35%, transparent 88%);
-        mask-image: linear-gradient(to bottom, #000 35%, transparent 88%);
       }
-      .slats {
+      .product-stage {
+        position: relative;
+        flex: 1;
+        min-height: 200px;
+      }
+      .product-stage::before {
+        content: '';
         position: absolute;
-        inset: -10% -20%;
-        transition: translate 0.9s var(--ease-out);
+        inset: 2% 6%;
+        border-radius: 50%;
+        background: radial-gradient(closest-side, rgb(255 255 255 / 0.17), rgb(255 255 255 / 0.05) 55%, transparent);
+        transition: scale 0.9s var(--ease-out);
       }
-      .slats-back {
-        background: repeating-linear-gradient(90deg, transparent 0 46px, rgb(255 255 255 / 0.035) 46px 48px);
-        translate: calc(var(--px) * -8px) calc(var(--py) * -4px);
+      .product:hover .product-stage::before {
+        scale: 1.08;
       }
-      .slats-mid {
-        background: repeating-linear-gradient(90deg, transparent 0 74px, var(--grey-2) 74px 86px, var(--grey-3) 86px 88px);
-        opacity: 0.55;
-        translate: calc(var(--px) * -18px) calc(var(--py) * -8px);
-      }
-      .slats-front {
-        background: repeating-linear-gradient(90deg, transparent 0 128px, #1c1c20 128px 150px, #3b3b42 150px 152px);
-        translate: calc(var(--px) * -34px) calc(var(--py) * -14px);
-      }
-      .beam {
+      .product-img {
         position: absolute;
         inset: 0;
-        background:
-          radial-gradient(60% 55% at 70% 18%, rgb(255 255 255 / 0.14), transparent 70%),
-          linear-gradient(115deg, transparent 40%, rgb(255 255 255 / 0.05) 55%, transparent 70%);
-        translate: calc(var(--px) * 12px) 0;
-        transition: translate 0.9s var(--ease-out);
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: drop-shadow(0 26px 30px rgb(0 0 0 / 0.6));
+        translate: calc(var(--px) * 10px) calc(var(--py) * 8px);
+        transition:
+          translate 0.9s var(--ease-out),
+          scale 0.9s var(--ease-out);
       }
-
-      /* Interiors: window light falling across a wall */
-      .viz-light {
-        background:
-          linear-gradient(118deg, transparent 18%, rgb(255 255 255 / 0.09) 30%, transparent 42%),
-          linear-gradient(118deg, transparent 44%, rgb(255 255 255 / 0.06) 54%, transparent 64%),
-          radial-gradient(90% 80% at 100% 0%, var(--grey-2), transparent 70%);
-        transition: background-position 1.2s var(--ease-out);
-        background-size: 140% 100%, 140% 100%, 100% 100%;
-        background-position: 0% 0, 0% 0, 0 0;
+      .product:hover .product-img {
+        scale: 1.05;
       }
-      .card-interiors:hover .viz-light {
-        background-position: 30% 0, 20% 0, 0 0;
+      .product-hoodie .product-img {
+        inset: 2% 6%;
+        width: 88%;
+        height: 96%;
+      }
+      .product-info {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+      .product-info p {
+        max-width: 40ch;
+        margin-top: 0.35rem;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+      .product:not(.product-hoodie) h3 {
+        font-size: 1.1rem;
+      }
+      /* Category chip pinned to the card's top corner */
+      .product-tag {
+        position: absolute;
+        top: clamp(14px, 1.6vw, 22px);
+        right: clamp(14px, 1.6vw, 22px);
+        padding: 0.3rem 0.75rem;
+        border: 1px solid var(--line-strong);
+        border-radius: 999px;
+        font-size: 0.75rem;
+        color: var(--muted);
+        white-space: nowrap;
       }
 
       /* Stat */
@@ -579,94 +591,6 @@
         color: var(--muted);
         font-size: 0.95rem;
       }
-
-      /* Materials */
-      .card-materials {
-        justify-content: space-between;
-      }
-      .swatches {
-        display: grid;
-        grid-template-columns: repeat(6, 1fr);
-        gap: 10px;
-      }
-      .swatches li {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        font-size: 0.75rem;
-        color: var(--muted);
-        line-height: 1.3;
-      }
-      .swatch {
-        display: block;
-        aspect-ratio: 1;
-        border-radius: 12px;
-        border: 1px solid var(--line);
-        box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.12);
-        transition: translate 0.5s var(--ease-out);
-      }
-      .swatches li:hover .swatch {
-        translate: 0 -4px;
-      }
-      .sw-travertine {
-        background:
-          repeating-linear-gradient(8deg, transparent 0 7px, rgb(0 0 0 / 0.12) 7px 8px),
-          linear-gradient(160deg, #8d8a85, #5f5c58);
-      }
-      .sw-oak {
-        background:
-          repeating-linear-gradient(94deg, rgb(255 255 255 / 0.05) 0 2px, transparent 2px 9px),
-          linear-gradient(135deg, #3b3834, #211f1d);
-      }
-      .sw-steel {
-        background: linear-gradient(135deg, #3e3f44 0%, #1c1d20 45%, #45464c 70%, #1a1b1e 100%);
-      }
-      .sw-lime {
-        background:
-          radial-gradient(60% 60% at 30% 30%, rgb(255 255 255 / 0.18), transparent 70%),
-          linear-gradient(160deg, #a5a39f, #7f7d79);
-      }
-      .sw-basalt {
-        background:
-          radial-gradient(circle at 20% 70%, rgb(255 255 255 / 0.05) 0 1px, transparent 2px) 0 0 / 7px 7px,
-          linear-gradient(150deg, #2a2a2d, #141416);
-      }
-      .sw-linen {
-        background:
-          repeating-linear-gradient(0deg, rgb(0 0 0 / 0.08) 0 1px, transparent 1px 3px),
-          repeating-linear-gradient(90deg, rgb(0 0 0 / 0.08) 0 1px, transparent 1px 3px),
-          linear-gradient(160deg, #c2c0bb, #98968f);
-      }
-      @media (max-width: 639px) {
-        .swatches {
-          grid-template-columns: repeat(3, 1fr);
-        }
-      }
-
-      /* Objects: stacked plinth study */
-      .card-objects {
-        min-height: 340px;
-      }
-      .viz-plinth {
-        display: grid;
-        place-items: center;
-        padding-bottom: 38%;
-        --px: 0;
-        --py: 0;
-      }
-      .block {
-        position: absolute;
-        left: 50%;
-        border-radius: 10px;
-        background: linear-gradient(180deg, #3a3a40, #1b1b1f);
-        box-shadow:
-          inset 0 1px 0 rgb(255 255 255 / 0.18),
-          0 18px 30px -12px rgb(0 0 0 / 0.7);
-        transition: translate 0.9s var(--ease-out);
-      }
-      .b1 { top: 38%; width: 58%; height: 13%; translate: calc(-50% + var(--px) * 4px) 0; }
-      .b2 { top: 25%; width: 40%; height: 14%; translate: calc(-50% + var(--px) * 10px) calc(var(--py) * -3px); background: linear-gradient(180deg, #4a4a52, #26262b); }
-      .b3 { top: 11%; width: 18%; height: 15%; border-radius: 999px; translate: calc(-50% + var(--px) * 18px) calc(var(--py) * -6px); background: radial-gradient(circle at 35% 30%, #7a7a82, #2a2a2f 70%); }
 
       /* Quote */
       .card-quote {
@@ -737,11 +661,41 @@
         max-width: 30ch;
         color: var(--muted);
       }
+      /* Close-ups cropped from the product cut-outs */
+      .step-visual {
+        flex: 1;
+        min-height: 180px;
+        margin-block: 1.25rem;
+        border-radius: 14px;
+        border: 1px solid var(--line);
+        background-color: var(--grey-1);
+        background-repeat: no-repeat;
+      }
+      .detail-piping {
+        background-image: url(images/globe-hoodie.webp), radial-gradient(circle at 40% 40%, var(--grey-3), transparent 70%);
+        background-size: 300%, 100%;
+        background-position: 12% 26%, center;
+      }
+      .detail-marks {
+        background-image: url(images/globe-track-crew.webp), radial-gradient(circle at 50% 45%, var(--grey-3), transparent 70%);
+        background-size: 330%, 100%;
+        background-position: 50% 26%, center;
+      }
+      .detail-panels {
+        background-image: url(images/wave-panel-crew.webp), radial-gradient(circle at 40% 40%, var(--grey-3), transparent 70%);
+        background-size: 250%, 100%;
+        background-position: 12% 16%, center;
+      }
+      .detail-fit {
+        background-image: url(images/script-tee.webp), radial-gradient(circle at 50% 50%, var(--grey-3), transparent 70%);
+        background-size: auto 88%, 100%;
+        background-position: center, center;
+      }
 
       /* Desktop: the track is pinned and panned horizontally by GSAP */
       @media (min-width: 900px) {
         /* The pinned process section centres itself in the viewport, so it supplies its own space. */
-        .studio {
+        .collection {
           padding-bottom: 0;
         }
         .process {
@@ -889,11 +843,12 @@
       <nav class="nav-pill glass" aria-label="Primary">
         <a class="nav-logo" href="#top" aria-label="LIVN CO. home">LIVN CO.</a>
         <ul class="nav-links">
-          <li><a href="#approach">Approach</a></li>
-          <li><a href="#studio">Studio</a></li>
-          <li><a href="#process">Process</a></li>
+          <li><a href="#collection">Collection</a></li>
+          <li><a href="#story">Story</a></li>
+          <li><a href="#details">Details</a></li>
         </ul>
-        <a class="btn btn-primary btn-sm" href="#contact" data-magnetic>Start a project</a>
+        <!-- Point the "Shop the drop" links at your store URL. -->
+        <a class="btn btn-primary btn-sm" href="#collection" data-magnetic>Shop the drop</a>
       </nav>
     </header>
 
@@ -902,122 +857,148 @@
       <section class="hero" id="top">
         <canvas class="hero-canvas" aria-hidden="true"></canvas>
         <div class="hero-inner container">
-          <h1 class="hero-title" data-hero-title>Homes shaped around how you live.</h1>
+          <h1 class="hero-title" data-hero-title>Built to be lived in.</h1>
           <p class="hero-sub" data-hero-fade>
-            LIVN CO. designs and builds residences, interiors and furniture with quiet materials and honest light.
+            LIVN CO. makes oversized hoodies, crewnecks and tees with clean piping and quiet marks. Est. 2026.
           </p>
           <div class="hero-ctas" data-hero-fade>
-            <a class="btn btn-primary" href="#contact" data-magnetic>Start a project <span aria-hidden="true">&rarr;</span></a>
-            <a class="btn btn-ghost glass" href="#studio" data-magnetic>Explore the studio</a>
+            <a class="btn btn-primary" href="#collection" data-magnetic>Shop the drop <span aria-hidden="true">&rarr;</span></a>
+            <a class="btn btn-ghost glass" href="#story" data-magnetic>Our story</a>
           </div>
         </div>
       </section>
 
       <!-- Statement -->
-      <section class="statement container" id="approach">
+      <section class="statement container" id="story">
         <p class="statement-text" data-scrub-words>
-          We design and build homes that hold up to real life. Fewer materials, better light, and rooms that get
-          better the longer you live in them. One studio carries every project from the first site visit to the
-          last shelf on the wall.
+          LIVN CO. started in 2026 with one rule: make the pieces you actually live in. Relaxed fits, clean piping
+          and two quiet marks, the globe and the wave. Nothing loud. Nothing you grow out of by next season.
         </p>
       </section>
 
-      <!-- Bento -->
-      <section class="studio container" id="studio">
+      <!-- Collection bento -->
+      <section class="collection container" id="collection">
         <header class="section-head">
-          <p class="eyebrow" data-reveal>The studio</p>
-          <h2 class="section-title" data-split>One team from first sketch to move-in day.</h2>
+          <p class="eyebrow" data-reveal>Drop 01</p>
+          <h2 class="section-title" data-split>Five pieces, all in black.</h2>
         </header>
 
         <div class="bento">
-          <article class="card glass card-arch" data-card>
-            <div class="viz viz-slats" aria-hidden="true">
-              <span class="slats slats-back"></span>
-              <span class="slats slats-mid"></span>
-              <span class="slats slats-front"></span>
-              <span class="beam"></span>
+          <article class="card glass product product-hoodie" data-card>
+            <div class="product-stage">
+              <img class="product-img" src="images/globe-hoodie.webp" width="977" height="973"
+                alt="Black LIVN CO. hoodie with silver piping and the globe logo on the chest" />
             </div>
-            <div class="card-body">
-              <h3>Architecture</h3>
-              <p>New builds and full renovations, planned from the site up. Every room is drawn around how it will actually be used.</p>
-            </div>
-          </article>
-
-          <article class="card glass card-interiors" data-card>
-            <div class="viz viz-light" aria-hidden="true"></div>
-            <div class="card-body">
-              <h3>Interiors</h3>
-              <p>Layouts, lighting and joinery for the rooms you already have.</p>
+            <div class="product-info">
+              <div>
+                <h3>Globe Piped Hoodie</h3>
+                <p>Oversized hoodie with silver piping along the seams and the globe mark on the chest.</p>
+              </div>
+              <span class="product-tag">Hoodie</span>
             </div>
           </article>
 
-          <!-- Placeholder figures: replace with real studio numbers. -->
+          <article class="card glass product product-crew-a" data-card>
+            <div class="product-stage">
+              <img class="product-img" src="images/wave-panel-crew.webp" width="1000" height="662" loading="lazy"
+                alt="Black LIVN CO. crewneck with white raglan panels and the wave script logo" />
+            </div>
+            <div class="product-info">
+              <div>
+                <h3>Wave Panel Crew</h3>
+                <p>White raglan panels and the hand-drawn wave script.</p>
+              </div>
+              <span class="product-tag">Crewneck</span>
+            </div>
+          </article>
+
+          <article class="card glass product product-crew-b" data-card>
+            <div class="product-stage">
+              <img class="product-img" src="images/globe-track-crew.webp" width="1000" height="724" loading="lazy"
+                alt="Black LIVN CO. crewneck with shoulder piping, white sleeve bands and the globe logo" />
+            </div>
+            <div class="product-info">
+              <div>
+                <h3>Globe Track Crew</h3>
+                <p>Shoulder piping, white sleeve bands and the globe mark.</p>
+              </div>
+              <span class="product-tag">Crewneck</span>
+            </div>
+          </article>
+
+          <article class="card glass product product-tee-a" data-card>
+            <div class="product-stage">
+              <img class="product-img" src="images/wave-tee.webp" width="1000" height="847" loading="lazy"
+                alt="Black LIVN CO. t-shirt with the wave script logo on the chest" />
+            </div>
+            <div class="product-info">
+              <div>
+                <h3>Wave Tee</h3>
+                <p>Boxy tee with the wave script on the chest.</p>
+              </div>
+              <span class="product-tag">Tee</span>
+            </div>
+          </article>
+
+          <article class="card glass product product-tee-b" data-card>
+            <div class="product-stage">
+              <img class="product-img" src="images/script-tee.webp" width="1000" height="859" loading="lazy"
+                alt="Black LIVN CO. t-shirt with the LIVN CO. script logo on the chest" />
+            </div>
+            <div class="product-info">
+              <div>
+                <h3>Script Tee</h3>
+                <p>The LIVN CO. script, clean and simple.</p>
+              </div>
+              <span class="product-tag">Tee</span>
+            </div>
+          </article>
+
           <article class="card glass card-stat" data-card>
-            <p class="stat"><span data-count="140">140</span>+</p>
-            <p class="stat-label">homes delivered since 2014</p>
+            <p class="stat-label">Established</p>
+            <p class="stat"><span data-count="2026" data-count-from="2000">2026</span></p>
+            <p class="stat-label">The year LIVN CO. started. Every piece carries the date.</p>
           </article>
 
-          <article class="card glass card-materials" data-card>
-            <div class="card-body">
-              <h3>Material library</h3>
-              <p>Over 300 samples of stone, timber, metal and plaster, so you choose by touch, not by screen.</p>
-            </div>
-            <ul class="swatches" aria-label="Sample materials">
-              <li><span class="swatch sw-travertine"></span>Travertine</li>
-              <li><span class="swatch sw-oak"></span>Smoked oak</li>
-              <li><span class="swatch sw-steel"></span>Blackened steel</li>
-              <li><span class="swatch sw-lime"></span>Lime plaster</li>
-              <li><span class="swatch sw-basalt"></span>Basalt</li>
-              <li><span class="swatch sw-linen"></span>Linen</li>
-            </ul>
-          </article>
-
-          <article class="card glass card-objects" data-card>
-            <div class="viz viz-plinth" aria-hidden="true">
-              <span class="block b1"></span>
-              <span class="block b2"></span>
-              <span class="block b3"></span>
-            </div>
-            <div class="card-body">
-              <h3>Furniture &amp; objects</h3>
-              <p>Pieces made in our own workshop to fit the space, not the catalogue.</p>
-            </div>
-          </article>
-
+          <!-- Placeholder review: replace with a real customer quote. -->
           <article class="card glass card-quote" data-card>
             <blockquote>
-              <p>&ldquo;They asked how we cook, where the kids drop their bags, when the sun hits the kitchen. The house feels like it already knew us.&rdquo;</p>
+              <p>&ldquo;Wore the Globe Hoodie all winter and it still looks brand new. Someone asks where it&rsquo;s from every time I wear it.&rdquo;</p>
               <footer>
-                <span class="quote-name">Mara Lindqvist</span>
-                <span class="quote-role">Homeowner, Hollow Creek residence</span>
+                <span class="quote-name">Jordan Ellis</span>
+                <span class="quote-role">Customer, Drop 01</span>
               </footer>
             </blockquote>
           </article>
         </div>
       </section>
 
-      <!-- Process: horizontal pan on desktop, vertical stack on mobile -->
-      <section class="process" id="process">
+      <!-- Details: horizontal pan on desktop, vertical stack on mobile -->
+      <section class="process" id="details">
         <div class="process-track">
           <div class="process-panel process-intro">
-            <h2 class="section-title" data-split>How a LIVN home comes together.</h2>
-            <p class="process-lede" data-reveal>Four parts, one team, and no hand-offs between strangers.</p>
+            <h2 class="section-title" data-split>The details you notice up close.</h2>
+            <p class="process-lede" data-reveal>Four things every piece in Drop 01 shares.</p>
           </div>
           <article class="process-panel glass step" data-step>
-            <h3 class="step-word">Listen</h3>
-            <p>We spend time in your current home first, learning the routines a floor plan should support.</p>
+            <h3 class="step-word">Piping</h3>
+            <div class="step-visual detail-piping" aria-hidden="true"></div>
+            <p>Contrast piping follows the seams on the hoodie and crewnecks, so the shape reads from across the room.</p>
           </article>
           <article class="process-panel glass step" data-step>
-            <h3 class="step-word">Draw</h3>
-            <p>Plans, models and material boards, revised together until every room earns its place.</p>
+            <h3 class="step-word">Marks</h3>
+            <div class="step-visual detail-marks" aria-hidden="true"></div>
+            <p>Two logos run through the collection: the globe and the hand-drawn wave, both in soft white.</p>
           </article>
           <article class="process-panel glass step" data-step>
-            <h3 class="step-word">Build</h3>
-            <p>Our own site crew and workshop on one schedule, with one person you can always call.</p>
+            <h3 class="step-word">Panels</h3>
+            <div class="step-visual detail-panels" aria-hidden="true"></div>
+            <p>White raglan panels and sleeve bands break up the black without shouting.</p>
           </article>
           <article class="process-panel glass step" data-step>
-            <h3 class="step-word">Live</h3>
-            <p>We come back after six months to adjust anything the house has taught you.</p>
+            <h3 class="step-word">Fit</h3>
+            <div class="step-visual detail-fit" aria-hidden="true"></div>
+            <p>Relaxed, dropped-shoulder cuts made for everyday wear, not just the photo.</p>
           </article>
         </div>
       </section>
@@ -1025,13 +1006,13 @@
       <!-- CTA -->
       <section class="contact container" id="contact">
         <div class="contact-panel glass" data-card>
-          <h2 class="contact-title" data-split>Tell us how you live.</h2>
+          <h2 class="contact-title" data-split>Wear it in.</h2>
           <p class="contact-sub" data-reveal>
-            Share a few details about your site or home. We reply within two working days.
+            Drop 01 is out now. Questions about sizing or an order? Email us and we reply within two working days.
           </p>
           <div class="contact-actions" data-reveal>
-            <a class="btn btn-primary btn-lg" href="mailto:hello@livnco.com?subject=New%20project" data-magnetic>
-              Start a project <span aria-hidden="true">&rarr;</span>
+            <a class="btn btn-primary btn-lg" href="#collection" data-magnetic>
+              Shop the drop <span aria-hidden="true">&rarr;</span>
             </a>
             <a class="contact-mail" href="mailto:hello@livnco.com">hello@livnco.com</a>
           </div>
@@ -1044,9 +1025,9 @@
       <div class="footer-row">
         <p>&copy; 2026 LIVN CO. All rights reserved.</p>
         <ul class="footer-links">
-          <li><a href="#approach">Approach</a></li>
-          <li><a href="#studio">Studio</a></li>
-          <li><a href="#process">Process</a></li>
+          <li><a href="#collection">Collection</a></li>
+          <li><a href="#story">Story</a></li>
+          <li><a href="#details">Details</a></li>
           <li><a href="https://instagram.com" rel="noopener" target="_blank">Instagram</a></li>
         </ul>
       </div>
@@ -1599,7 +1580,6 @@
 
       function initCards() {
         document.querySelectorAll('.card').forEach((card) => {
-          const viz = card.querySelector('.viz-slats, .viz-plinth');
           const rx = !reduced && gsap.quickTo(card, 'rotationX', { duration: 0.8, ease: 'power3.out' });
           const ry = !reduced && gsap.quickTo(card, 'rotationY', { duration: 0.8, ease: 'power3.out' });
 
@@ -1609,10 +1589,9 @@
             const py = (e.clientY - r.top) / r.height;
             card.style.setProperty('--mx', `${px * 100}%`);
             card.style.setProperty('--my', `${py * 100}%`);
-            if (viz) {
-              viz.style.setProperty('--px', (px - 0.5) * 2);
-              viz.style.setProperty('--py', (py - 0.5) * 2);
-            }
+            // Drives the product image parallax.
+            card.style.setProperty('--px', (px - 0.5) * 2);
+            card.style.setProperty('--py', (py - 0.5) * 2);
             // Tilt only once the entrance animation has handed over the transform.
             if (rx && card.dataset.revealed) {
               rx((0.5 - py) * 5);
@@ -1620,10 +1599,8 @@
             }
           });
           card.addEventListener('pointerleave', () => {
-            if (viz) {
-              viz.style.setProperty('--px', 0);
-              viz.style.setProperty('--py', 0);
-            }
+            card.style.setProperty('--px', 0);
+            card.style.setProperty('--py', 0);
             if (rx) {
               rx(0);
               ry(0);
@@ -1775,8 +1752,8 @@
       function counters() {
         document.querySelectorAll('[data-count]').forEach((el) => {
           const end = Number(el.dataset.count);
-          const obj = { v: 0 };
-          el.textContent = '0';
+          const obj = { v: Number(el.dataset.countFrom ?? 0) };
+          el.textContent = String(obj.v);
           gsap.to(obj, {
             v: end,
             duration: 2,
