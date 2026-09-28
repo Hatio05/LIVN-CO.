@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>LIVN CO. | Architecture, interiors and objects</title>
+    <meta
+      name="description"
+      content="LIVN CO. designs and builds homes, interiors and furniture around the way people actually live."
+    />
+    <meta name="theme-color" content="#0b0b0c" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script>
+      // Hide reveal targets before first paint only when motion is allowed and JS runs.
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('motion');
+      }
+    </script>
+  </head>
+  <body>
+    <canvas class="mesh" aria-hidden="true"></canvas>
+    <div class="grain" aria-hidden="true"></div>
+
+    <div class="intro" aria-hidden="true">
+      <div class="intro-mark"><span>LIVN</span> <span>CO.</span></div>
+    </div>
+
+    <header class="nav">
+      <nav class="nav-pill glass" aria-label="Primary">
+        <a class="nav-logo" href="#top" aria-label="LIVN CO. home">LIVN CO.</a>
+        <ul class="nav-links">
+          <li><a href="#approach">Approach</a></li>
+          <li><a href="#studio">Studio</a></li>
+          <li><a href="#process">Process</a></li>
+        </ul>
+        <a class="btn btn-primary btn-sm" href="#contact" data-magnetic>Start a project</a>
+      </nav>
+    </header>
+
+    <main>
+      <!-- Hero -->
+      <section class="hero" id="top">
+        <canvas class="hero-canvas" aria-hidden="true"></canvas>
+        <div class="hero-inner container">
+          <h1 class="hero-title" data-hero-title>Homes shaped around how you live.</h1>
+          <p class="hero-sub" data-hero-fade>
+            LIVN CO. designs and builds residences, interiors and furniture with quiet materials and honest light.
+          </p>
+          <div class="hero-ctas" data-hero-fade>
+            <a class="btn btn-primary" href="#contact" data-magnetic>Start a project <span aria-hidden="true">&rarr;</span></a>
+            <a class="btn btn-ghost glass" href="#studio" data-magnetic>Explore the studio</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Statement -->
+      <section class="statement container" id="approach">
+        <p class="statement-text" data-scrub-words>
+          We design and build homes that hold up to real life. Fewer materials, better light, and rooms that get
+          better the longer you live in them. One studio carries every project from the first site visit to the
+          last shelf on the wall.
+        </p>
+      </section>
+
+      <!-- Bento -->
+      <section class="studio container" id="studio">
+        <header class="section-head">
+          <p class="eyebrow" data-reveal>The studio</p>
+          <h2 class="section-title" data-split>One team from first sketch to move-in day.</h2>
+        </header>
+
+        <div class="bento">
+          <article class="card glass card-arch" data-card>
+            <div class="viz viz-slats" aria-hidden="true">
+              <span class="slats slats-back"></span>
+              <span class="slats slats-mid"></span>
+              <span class="slats slats-front"></span>
+              <span class="beam"></span>
+            </div>
+            <div class="card-body">
+              <h3>Architecture</h3>
+              <p>New builds and full renovations, planned from the site up. Every room is drawn around how it will actually be used.</p>
+            </div>
+          </article>
+
+          <article class="card glass card-interiors" data-card>
+            <div class="viz viz-light" aria-hidden="true"></div>
+            <div class="card-body">
+              <h3>Interiors</h3>
+              <p>Layouts, lighting and joinery for the rooms you already have.</p>
+            </div>
+          </article>
+
+          <!-- Placeholder figures: replace with real studio numbers. -->
+          <article class="card glass card-stat" data-card>
+            <p class="stat"><span data-count="140">140</span>+</p>
+            <p class="stat-label">homes delivered since 2014</p>
+          </article>
+
+          <article class="card glass card-materials" data-card>
+            <div class="card-body">
+              <h3>Material library</h3>
+              <p>Over 300 samples of stone, timber, metal and plaster, so you choose by touch, not by screen.</p>
+            </div>
+            <ul class="swatches" aria-label="Sample materials">
+              <li><span class="swatch sw-travertine"></span>Travertine</li>
+              <li><span class="swatch sw-oak"></span>Smoked oak</li>
+              <li><span class="swatch sw-steel"></span>Blackened steel</li>
+              <li><span class="swatch sw-lime"></span>Lime plaster</li>
+              <li><span class="swatch sw-basalt"></span>Basalt</li>
+              <li><span class="swatch sw-linen"></span>Linen</li>
+            </ul>
+          </article>
+
+          <article class="card glass card-objects" data-card>
+            <div class="viz viz-plinth" aria-hidden="true">
+              <span class="block b1"></span>
+              <span class="block b2"></span>
+              <span class="block b3"></span>
+            </div>
+            <div class="card-body">
+              <h3>Furniture &amp; objects</h3>
+              <p>Pieces made in our own workshop to fit the space, not the catalogue.</p>
+            </div>
+          </article>
+
+          <article class="card glass card-quote" data-card>
+            <blockquote>
+              <p>&ldquo;They asked how we cook, where the kids drop their bags, when the sun hits the kitchen. The house feels like it already knew us.&rdquo;</p>
+              <footer>
+                <span class="quote-name">Mara Lindqvist</span>
+                <span class="quote-role">Homeowner, Hollow Creek residence</span>
+              </footer>
+            </blockquote>
+          </article>
+        </div>
+      </section>
+
+      <!-- Process: horizontal pan on desktop, vertical stack on mobile -->
+      <section class="process" id="process">
+        <div class="process-track">
+          <div class="process-panel process-intro">
+            <h2 class="section-title" data-split>How a LIVN home comes together.</h2>
+            <p class="process-lede" data-reveal>Four parts, one team, and no hand-offs between strangers.</p>
+          </div>
+          <article class="process-panel glass step" data-step>
+            <h3 class="step-word">Listen</h3>
+            <p>We spend time in your current home first, learning the routines a floor plan should support.</p>
+          </article>
+          <article class="process-panel glass step" data-step>
+            <h3 class="step-word">Draw</h3>
+            <p>Plans, models and material boards, revised together until every room earns its place.</p>
+          </article>
+          <article class="process-panel glass step" data-step>
+            <h3 class="step-word">Build</h3>
+            <p>Our own site crew and workshop on one schedule, with one person you can always call.</p>
+          </article>
+          <article class="process-panel glass step" data-step>
+            <h3 class="step-word">Live</h3>
+            <p>We come back after six months to adjust anything the house has taught you.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="contact container" id="contact">
+        <div class="contact-panel glass" data-card>
+          <h2 class="contact-title" data-split>Tell us how you live.</h2>
+          <p class="contact-sub" data-reveal>
+            Share a few details about your site or home. We reply within two working days.
+          </p>
+          <div class="contact-actions" data-reveal>
+            <a class="btn btn-primary btn-lg" href="mailto:hello@livnco.com?subject=New%20project" data-magnetic>
+              Start a project <span aria-hidden="true">&rarr;</span>
+            </a>
+            <a class="contact-mail" href="mailto:hello@livnco.com">hello@livnco.com</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer container">
+      <p class="footer-mark" data-reveal aria-hidden="true">LIVN CO.</p>
+      <div class="footer-row">
+        <p>&copy; 2026 LIVN CO. All rights reserved.</p>
+        <ul class="footer-links">
+          <li><a href="#approach">Approach</a></li>
+          <li><a href="#studio">Studio</a></li>
+          <li><a href="#process">Process</a></li>
+          <li><a href="https://instagram.com" rel="noopener" target="_blank">Instagram</a></li>
+        </ul>
+      </div>
+    </footer>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
