@@ -402,6 +402,92 @@
         letter-spacing: -0.04em;
       }
 
+      /* ---------- Film (scroll-scrubbed image sequence) ---------- */
+
+      .film {
+        position: relative;
+      }
+      .film-stage {
+        position: relative;
+        height: 100dvh;
+        overflow: hidden;
+      }
+      .film-frame {
+        position: absolute;
+        inset: 0;
+        background: #08090b;
+      }
+      /* Starts as an inset card; GSAP opens it to full bleed as the section pins. */
+      .motion .film-frame {
+        clip-path: inset(8% 7% 8% 7% round 24px);
+      }
+      .film-canvas,
+      .film-poster {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      .film-poster {
+        object-fit: cover;
+      }
+      .motion .film-poster,
+      html:not(.motion) .film-canvas {
+        display: none;
+      }
+      /* Vignette so the footage melts into the page above and below */
+      .film-frame::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background:
+          linear-gradient(to bottom, rgb(11 11 12 / 0.6), transparent 22%, transparent 58%, rgb(11 11 12 / 0.9)),
+          radial-gradient(120% 90% at 50% 50%, transparent 55%, rgb(11 11 12 / 0.55));
+      }
+      .film-captions {
+        position: absolute;
+        left: max(var(--gutter), calc((100vw - var(--max)) / 2 + var(--gutter)));
+        right: var(--gutter);
+        bottom: clamp(32px, 8vh, 80px);
+        height: 7rem;
+        pointer-events: none;
+      }
+      .film-caption {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        opacity: 0;
+        translate: 0 20px;
+        filter: blur(8px);
+        transition:
+          opacity 0.6s var(--ease-out),
+          translate 0.9s var(--ease-out),
+          filter 0.6s var(--ease-out);
+      }
+      .film.is-live .film-caption.is-active,
+      html:not(.motion) .film-caption:last-child {
+        opacity: 1;
+        translate: 0 0;
+        filter: blur(0);
+      }
+      .film-kicker {
+        font-size: 0.78rem;
+        font-weight: 500;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .film-name {
+        font-size: clamp(2rem, 4.6vw, 4rem);
+        font-weight: 600;
+        line-height: 1.05;
+        letter-spacing: -0.04em;
+        text-shadow: 0 2px 30px rgb(0 0 0 / 0.5);
+      }
+
       /* ---------- Collection bento ---------- */
 
       .collection {
@@ -874,6 +960,40 @@
           LIVN CO. started in 2026 with one rule: make the pieces you actually live in. Relaxed fits, clean piping
           and two quiet marks, the globe and the wave. Nothing loud. Nothing you grow out of by next season.
         </p>
+      </section>
+
+      <!-- Film: the brand film as an image sequence, scrubbed by scroll while the section is pinned -->
+      <section class="film" id="film" aria-label="Drop 01 film">
+        <div class="film-stage">
+          <div class="film-frame">
+            <canvas class="film-canvas" aria-hidden="true"></canvas>
+            <img class="film-poster" src="film/frame-192.webp" width="1280" height="720"
+              alt="The five LIVN CO. Drop 01 pieces lined up under a spotlight" />
+          </div>
+          <div class="film-captions" aria-hidden="true">
+            <p class="film-caption" data-from="0" data-to="23">
+              <span class="film-kicker">Est. 2026</span><span class="film-name">The globe mark</span>
+            </p>
+            <p class="film-caption" data-from="24" data-to="47">
+              <span class="film-kicker">Hoodie</span><span class="film-name">Globe Piped Hoodie</span>
+            </p>
+            <p class="film-caption" data-from="48" data-to="71">
+              <span class="film-kicker">Crewneck</span><span class="film-name">Wave Panel Crew</span>
+            </p>
+            <p class="film-caption" data-from="72" data-to="95">
+              <span class="film-kicker">Detail</span><span class="film-name">White raglan panels</span>
+            </p>
+            <p class="film-caption" data-from="96" data-to="119">
+              <span class="film-kicker">Crewneck</span><span class="film-name">Globe Track Crew</span>
+            </p>
+            <p class="film-caption" data-from="120" data-to="143">
+              <span class="film-kicker">Two marks, one collection</span><span class="film-name">The wave script</span>
+            </p>
+            <p class="film-caption" data-from="144" data-to="192">
+              <span class="film-kicker">Out now</span><span class="film-name">Drop 01</span>
+            </p>
+          </div>
+        </div>
       </section>
 
       <!-- Collection bento -->
@@ -1820,6 +1940,137 @@
         );
       }
 
+      /* ---------------- Film: scroll-scrubbed image sequence ---------------- */
+
+      // The brand film is pre-split into WebP frames (film/frame-000..192.webp). Drawing frames to a
+      // canvas scrubs far more smoothly than seeking a <video>, especially on Safari and iOS.
+      const FILM_FRAMES = 193;
+
+      function filmScroll() {
+        const section = document.querySelector('.film');
+        const canvas = section.querySelector('.film-canvas');
+        const ctx = canvas.getContext('2d');
+        const captions = [...section.querySelectorAll('.film-caption')];
+        const scenes = captions.map((c) => [Number(c.dataset.from), Number(c.dataset.to)]);
+        const frames = new Array(FILM_FRAMES);
+        const playhead = { frame: 0 };
+        let drawnIndex = -1;
+        let activeCaption = -1;
+
+        // Nearest frame that has finished loading, searching backwards first so motion never jumps ahead.
+        function nearestLoaded(i) {
+          for (let d = 0; d < FILM_FRAMES; d++) {
+            if (frames[i - d]) return i - d;
+            if (frames[i + d]) return i + d;
+          }
+          return -1;
+        }
+
+        function draw(force = false) {
+          const want = Math.round(playhead.frame);
+          const index = nearestLoaded(want);
+          if (index < 0 || (index === drawnIndex && !force)) return updateCaption(want);
+          const img = frames[index];
+          const cw = canvas.width;
+          const ch = canvas.height;
+          const iw = img.naturalWidth;
+          const ih = img.naturalHeight;
+          const cover = Math.max(cw / iw, ch / ih);
+          // Portrait screens: crop the sides less than a full cover would, and let the frame float.
+          const scale = cw < ch ? Math.min(cover, (cw / iw) * 1.7) : cover;
+          const w = iw * scale;
+          const h = ih * scale;
+          const y = (ch - h) / 2;
+          ctx.fillStyle = '#08090b';
+          ctx.fillRect(0, 0, cw, ch);
+          ctx.drawImage(img, (cw - w) / 2, y, w, h);
+          if (h < ch) {
+            // Feather the top and bottom edges of a letterboxed frame into the background.
+            const feather = h * 0.18;
+            for (const [from, to] of [[y, y + feather], [y + h, y + h - feather]]) {
+              const g = ctx.createLinearGradient(0, from, 0, to);
+              g.addColorStop(0, '#08090b');
+              g.addColorStop(1, 'rgba(8, 9, 11, 0)');
+              ctx.fillStyle = g;
+              ctx.fillRect(0, Math.min(from, to), cw, feather);
+            }
+          }
+          drawnIndex = index;
+          updateCaption(want);
+        }
+
+        function updateCaption(i) {
+          const next = scenes.findIndex(([a, b]) => i >= a && i <= b);
+          if (next === activeCaption) return;
+          captions[activeCaption]?.classList.remove('is-active');
+          captions[next]?.classList.add('is-active');
+          activeCaption = next;
+        }
+
+        function resize() {
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          const r = canvas.getBoundingClientRect();
+          canvas.width = Math.max(1, Math.round(r.width * dpr));
+          canvas.height = Math.max(1, Math.round(r.height * dpr));
+          draw(true);
+        }
+        new ResizeObserver(resize).observe(canvas);
+
+        function load(i) {
+          return new Promise((resolve) => {
+            const img = new Image();
+            img.decoding = 'async';
+            img.onload = () => {
+              frames[i] = img;
+              // Redraw if this frame is closer to the playhead than what is on screen.
+              const want = Math.round(playhead.frame);
+              if (Math.abs(i - want) < Math.abs(drawnIndex - want) || drawnIndex < 0) draw(true);
+              resolve();
+            };
+            img.onerror = resolve;
+            img.src = `film/frame-${String(i).padStart(3, '0')}.webp`;
+          });
+        }
+
+        // Load coarse-to-fine (every 16th frame, then 8th, 4th...) so scrubbing works across the whole
+        // film early, then fills in to full 24 fps.
+        const order = [FILM_FRAMES - 1];
+        const queued = new Set([0, FILM_FRAMES - 1]);
+        for (const step of [16, 8, 4, 2, 1]) {
+          for (let i = 0; i < FILM_FRAMES; i += step) {
+            if (!queued.has(i)) {
+              queued.add(i);
+              order.push(i);
+            }
+          }
+        }
+        load(0).then(() => {
+          let next = 0;
+          const worker = async () => {
+            while (next < order.length) await load(order[next++]);
+          };
+          for (let k = 0; k < 6; k++) worker();
+        });
+
+        // Pinned for ~3.5 screens: the inset card opens to full bleed, the film plays with the scroll,
+        // then holds on the lineup before handing over to the collection.
+        gsap
+          .timeline({
+            scrollTrigger: {
+              trigger: section,
+              start: 'top top',
+              end: () => `+=${Math.round(window.innerHeight * 3.5)}`,
+              pin: true,
+              scrub: 0.8,
+              invalidateOnRefresh: true,
+              onToggle: (self) => section.classList.toggle('is-live', self.isActive),
+            },
+          })
+          .to('.film-frame', { clipPath: 'inset(0% 0% 0% 0% round 0px)', ease: 'power2.inOut', duration: 0.12 }, 0)
+          .to(playhead, { frame: FILM_FRAMES - 1, ease: 'none', duration: 0.82, onUpdate: () => draw() }, 0.06)
+          .to({}, { duration: 0.1 });
+      }
+
       /* ---------------- Boot ---------------- */
 
       document.fonts.ready.then(() => {
@@ -1830,6 +2081,8 @@
 
         introTimeline();
         heroScroll();
+        // Pins are created top to bottom so every trigger below them measures the added scroll space.
+        filmScroll();
         revealHeadings();
         revealGeneric();
         revealCards();
